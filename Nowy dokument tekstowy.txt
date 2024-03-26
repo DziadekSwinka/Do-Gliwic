@@ -1,0 +1,11 @@
+class MainWindow(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setup()
+       
+    def setup(self):
+        label=QLabel(self)
+        label.setText("Temperatura: ")
+        self.setFixedSize(800,600)
+        self.setWindowTitle("MainWindow")
+        self.show()

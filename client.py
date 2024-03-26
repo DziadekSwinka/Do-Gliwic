@@ -2,16 +2,15 @@ import random
 import time
 import socket as s
 
-HOST='192.168.56.1'
+HOST='192.168.0.97'
 PORT=1313
-temp=0
 print("Klient")
-client_socket=s.socket(s.AF_INET, s.SOCK_STREAM)
+client_socket=s.socket(s.AF_INET, s.SOCK_DGRAM)
 client_socket.connect((HOST,PORT))
 while True:
-    name=str(round(random.random()*10+20,0)).encode("utf8")
+    name=str(round(random.random()*10+20,0))
     print(f"Temp: {name}")
-    client_socket.send(name)
+    client_socket.sendall(name.encode())
     time.sleep(1)
-input()    
-    
+client_socket.close()    
+input()      

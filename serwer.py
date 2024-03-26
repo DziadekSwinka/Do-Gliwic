@@ -1,28 +1,29 @@
 import socket as s
 import os
-from PySide6.QtWidgets import QApplication,QWidget,QLabel
+#from PySide6.QtWidgets import QApplication,QWidget,QLabel,QLineEdit
 
-class MainWindow(QWidget):
+'''class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.setup()
-       
     def setup(self):
         label=QLabel(self)
-        label.setText("Temperatura: ")
+        label.setText(f"Temperatura: ")
         self.setFixedSize(800,600)
         self.setWindowTitle("MainWindow")
         self.show()
-
+    def OnTextChanged(self,text):
+        label.setText('Temperatura'+text)
+        self.update()
+'''
 if __name__=="__main__":
 
     #app=QApplication([])
     #main_window=MainWindow()
-    #app.exec()
-    HOST='192.168.56.1'
+    HOST='192.168.0.97'
     PORT=1313
     BUFFER=1024
-    
+    #app.exec()
     print("Serwer")
 
     server_socket= s.socket(s.AF_INET,s.SOCK_STREAM)
@@ -35,5 +36,7 @@ if __name__=="__main__":
         while True:
             name=client_socket.recv(BUFFER).decode("utf8")
             print(f"Temperatura: {name} C")
+            #main_window.OnTextChanged(name)
             if float(name)>=28:
                 os.system("C://Users//pc//Desktop//Na_gliwice//Alarm//bin//Release//Alarm.exe")
+    
