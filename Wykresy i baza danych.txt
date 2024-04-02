@@ -1,0 +1,68 @@
+import time
+import mysql.connector as sql
+import random
+import matplotlib.pyplot as plt
+
+connection_temp = sql.connect(user='kamil', password='kamil', host='127.0.0.1',
+                              database='temperatury_test', auth_plugin='mysql_native_password')
+
+query_ruch = 'INSERT INTO ruch (czy_ruch) VALUES (%s)'
+query_temp = 'INSERT INTO odczyty (temperatura) VALUES (%s)'
+query_select = 'SELECT data, temperatura FROM odczyty ORDER BY data DESC LIMIT 15'
+query_hum = 'INSERT INTO wilg (hum) VALUES (%s)'
+
+licznik = int(input('ile danych: '))
+#licznik=1
+
+while licznik > 0:
+    new_temp = float(random.uniform(10, 20))
+    cursor_temp = connection_temp.cursor()
+    cursor_temp.execute(query_temp, (new_temp,))
+    connection_temp.commit()
+    cursor_temp.close()
+
+    cursor_selct = connection_temp.cursor()
+    cursor_selct.execute(query_select)
+    results = cursor_selct.fetchall()
+    cursor_selct.close()
+
+    new_hum = float(random.uniform(50, 90))
+    cursor_hum = connection_temp.cursor()
+    cursor_hum.execute(query_hum, (new_hum,))
+    connection_temp.commit()
+    cursor_hum.close()
+
+    wykr_ruchu = int(random.uniform(0, 3))
+    if wykr_ruchu == 0:
+        cursor_ruch = connection_temp.cursor()
+        cursor_ruch.execute(query_ruch, ('tak',))
+        connection_temp.commit()
+        cursor_ruch.close()
+    print(licznik, '   -   temp: ', round(new_temp, 1), '   ', wykr_ruchu)
+    licznik -= 1
+    # time.sleep(1)
+
+    data = [row[0].strftime('%H:%M:%S') for row in results]
+    temp = [row[1] for row in results]
+
+    plt.clf()
+    plt.scatter(data, temp, s=15, marker='o', color='blue', alpha=1)  # Rozmiar, marker, kolor i przezroczystość punktów
+    plt.plot(data, temp)
+    plt.xticks(fontsize=10)  # Rozmiar czcionki na osiach X
+    plt.xlabel('Godzina')
+    plt.ylabel('Odczyt temp')
+    plt.title('Wykres temperatur')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.grid(True)
+    plt.pause(1)
+
+#plt.savefig("wykres.png")
+plt.show()
+print('Koniec')
+
+'''
+    x=range(0,15)
+    for i in x:
+        print(i+1, '. ', temp[i])
+'''

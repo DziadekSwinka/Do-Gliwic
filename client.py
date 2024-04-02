@@ -2,7 +2,7 @@ import random
 import time
 import socket as s
 
-HOST='192.168.0.97'
+HOST='192.168.0.104'
 PORT=1313
 print("Klient")
 client_socket=s.socket(s.AF_INET, s.SOCK_DGRAM)

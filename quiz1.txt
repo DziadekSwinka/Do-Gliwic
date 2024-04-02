@@ -1,0 +1,47 @@
+import mysql.connector as sql
+import random
+
+connection = sql.connect(user='kamil', password='kamil', host='127.0.0.1',
+                         database='pytania1', auth_plugin='mysql_native_password')
+
+query = 'SELECT * FROM pytania WHERE id=%s LIMIT 1'
+
+licznik = 0
+odp = [6, 6, 6, 6, 6]
+
+dane = 3
+
+while licznik < dane:
+
+    a = int(random.uniform(1, dane+1))
+
+    while a in odp[:licznik]:
+        a = int(random.uniform(1, dane+1))
+
+    odp[licznik] = a
+
+    cursor = connection.cursor()
+    cursor.execute(query, (a,))
+    result = cursor.fetchone()
+
+    if result:
+        for i in range(6):
+            print(result[i])
+    else:
+        print("Brak danych dla podanego ID.")
+        continue
+
+    odpowiedz = input('podaj odp: ')
+    while odpowiedz != result[6]:
+        print('źle')
+        print('Jeszcze raz')
+        for i in range(6):
+            print(result[i])
+        odpowiedz = input('podaj odp: ')
+
+    print('Brawo!!!')
+
+    licznik += 1
+    print('')
+
+connection.close()
